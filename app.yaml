@@ -1,0 +1,9 @@
+runtime: python38
+default_expiration: '10m'
+instance_class: F4_1G
+automatic_scaling:
+  min_idle_instances: automatic
+  max_idle_instances: 1
+  min_pending_latency: automatic
+  max_pending_latency: 0.030s
+  max_instances: 1 

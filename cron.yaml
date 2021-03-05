@@ -1,0 +1,7 @@
+cron:
+  - description: "fetching new sea level data from Copernicus's server"
+    url: /tasks/getsla
+    schedule: every 12 hours 
+    #  - description: "fetching new rain data from Thailand Met Office"
+    #url: /tasks/getrain
+    #schedule: every 24 hours 

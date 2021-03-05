@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>dsRain - Data Science @ Science-CMU Rainfall Forecasting</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}" />
+    <!-- for datepicker -->
+</head>
+
+<body>
+<header>
+<div class="tab">
+  <div class='logo'>dsRain</div>
+  <button class="active" onclick="location.href='info'">Info</button>
+  <button class="tablinks" onclick="location.href='data'">Data</button>
+  <button class="tablinks" onclick="location.href='/'">Forecast</button>
+</div>
+</header>
+
+<div id="theory" class='tabcontent' style=display:block>
+    <div class="container">
+        <div class="info">
+	    <b>Introduction:</b>
+<p>
+เป็นที่ยอมรับกันว่าโลกกำลังเผชิญปัญหาการเปลี่ยนแปลงสภาพภูมิอากาศ  โดยการศึกษาที่ผ่านมาพบว่าปัจจัยการเปลี่ยนแปลงของสภาพพื้นผิวในบริเวณทะเลหรือมหาสมุทรเป็นปัจจัยที่มีความสำคัญและมีความสัมพันธ์ต่อการเปลี่ยนแปลงสภาพภูมิอากาศที่รุนแรง เช่น ปรากฎการณ์ El Nino และ La Nina  ซึ่งเป็นการศึกษาผลกระทบของการเปลี่ยนแปลงอุณหภูมิของพื้นผิวทะเลในบริเวณมหาสมุทรแปซิฟิค  หรือการศึกษาการเปลี่ยนแปลงของระดับความกดอากาศระดับพื้นผิวทะเล (Southern Oscillation Index, SOI) ที่ตรวจวัด ณ สถานี Tahiti และ สถานี Darwin ยังผลทำให้สภาพฝนของภูมิภาคเอเชียตะวันออกเฉียงใต้รวมทั้งประเทศไทยแปรปรวน  
+</p>
+
+<center>
+<img height='300px' src="{{url_for('static',filename='EOF2.png')}}">
+<img height='300px' src="{{url_for('static',filename='EOF3.png')}}"><br />
+<i>รูปที่ 1: ลักษณะความแปรปรวนของความสูงคลื่นบริเวณมหาสมุทรอินเดียที่สอดคล้องกับปรากฎการณ์ ENSO</i>
+</center>
+
+<p>ด้วยตำแหน่งที่ตั้งของประเทศไทย (Lat: 5-20&deg N, Lon: 97-105&deg E) ซึ่งอยู่มีมหาสมุทรแปซิฟิคและมหาสมุทรอินเดียอยู่ในทิศตะวันตกและตะวันออกของประเทศ  ปริมาณน้ำฝนที่ตกในบริเวณประเทศไทยได้รับอิทธิพลจากลมมรสุมตะวันออกเฉียงเหนือซึ่งนำความชื้นมาจากมหาสมุทรแปซิฟิกและลมมรสุมตะวันตกเฉียงใต้ซึ่งนำความชื้นมาจากมหาสมุทรอินเดีย  จากการศึกษาพบว่าการเปลี่ยนแปลงความสูงคลื่นที่เด่นชัดในมหาสมุทรอินเดียมี 2 พื้นที่ ประกอบด้วยพื้นที่อ่าวเบงกอล และพื้นที่ใกล้เคียงกับเกาะสุมาตรา (ดูรูปที่ 1) เพื่อนำมาใช้ในการพยากรณ์ปริมาณฝน
+</p>
+<p>ดังนั้นในการพัฒนาแอปพลิเคชันนี้จึงต้องการนำผลการศึกษาข้างต้น มาประยุกต์ใช้เพื่อคาดการณ์ปริมาณน้ำฝนที่ประเทศไทยจะได้รับผ่านการเปลี่ยนแปลงของความสูงคลื่นใน 2 บริเวณของมหาสมุทรอินเดีย  โดยการคาดการณ์ปริมาณฝนที่แต่ละพื้นที่ของประเทศไทยจะได้รับล่วงหน้าอาจจะช่วยให้เกษตรกรหรือประชาชนในพื้นที่ต่าง ๆ เตรียมตัวรับสถานการณ์น้ำท่วมหรือน้ำแล้งได้ดีขึ้น
+</p>
+
+<br />
+<b>Objectives:</b>
+<ul>
+<li>เก็บรวบรวมและวิเคราะห์ข้อมูลจากดาวเทียมเพื่อใช้คาดการณ์ปริมาณฝนของประเทศไทย</li>
+<li>สร้าง web application เพื่อนำเสนอผลการคาดการณ์ปริมาณน้ำฝนของประเทศไทย</li>
+</ul>
+
+            <b>Features:</b>
+            <ul>
+        <li>ตัวแบบสำหรับการคาดการณ์สร้างขึ้นบนพื้นฐานของ Gradient boosting regression model บนข้อมูลตัวแปรต้น 5 ตัว ได้แก่ date, latitude, longitude, BoB index, Sumatra index เพื่อคาดการณ์ปริมาณน้ำฝนในแต่ละจังหวัดของประเทศไทยแบบรายวัน train บนข้อมูลย้อนหลัง 1 ปี </li>
+                <li>ทำการดึงข้อมูลดิบที่จำเป็นแบบรายวันจากต้นทางหลายแหล่งโดยอัตโนมัติ
+        เพื่อใช้ในการคำนวณค่าตัวแปรต้น 5 ตัว ข้อมูลที่ใช้คำนวณ BoB index และ Sumatra index มาจาก <a href='https://marine.copernicus.eu'>Copernicus Marine Service</a> ส่วนค่าปริมาณน้ำฝนรายวันของแต่ละจังหวัดในประเทศไทยอ้างอิงจากกรมอุตุนิยมวิทยา</li>
+                <li>อำนวยความสะดวกแก่นักวิจัยที่ต้องการใช้ข้อมูล BoB index และ Sumatra index ให้ download ข้อมูลในรูปแบบของไฟล์ CSV ได้</li>
+            </ul>
+            
+	    <b>Suggestions:</b>
+            <ul>
+                <li>ระบบถูกออกแบบแบบแยกส่วน (modular design) รองรับการปรับเปลี่ยน model การคาดการณ์พยากรณ์รูปแบบอื่นได้ เช่น online learning model ที่เรียนรู้ไปพร้อมกับข้อมูลใหม่ในแต่ละวัน</li>
+                <li>ทดลองผนวกดัชนีบ่งชี้อื่นที่มีความสัมพันธ์กับปริมาณน้ำฝน</li>
+            </ul>
+	    
+	    <b>Acknowledgement:</b>
+            <ul>
+                <li>ทุนสนับสนุนการพัฒนานวัตกรรมจากศูนย์วิจัยวิทยาการข้อมูล คณะวิทยาศาสตร์ มหาวิทยาลัยเชียงใหม่</li>
+                <li>ขอขอบคุณกรมอุตุนิยมวิทยาที่เอื้อเฟื้อข้อมูลฝนรายวันของจังหวัดในประเทศไทย</li>
+		<li>Copernicus Marine Service สำหรับข้อมูลภาพถ่ายดาวเทียมเพื่อคำนวณดัชนี BoB และ S-index</li>
+            </ul>
+            
+	    <b>Team:</b>
+            <ul>
+                <li>รศ.ดร. ธเนศร์ โรจน์ศิรพิศาล ภาควิชาคณิตศาสตร์ มช.</li>
+                <li>ผศ.ดร. จักรเมธ บุตรกระจ่าง ภาควิชาวิทยาการคอมพิวเตอร์ มช.</li>
+		<li>นายพนาสัณฑ์ มโนรส ภาควิชาคณิตศาสตร์ มช.</li>
+                <li>นายไกรสรวัฒน์ ปัญโญ ภาควิชาวิทยาการคอมพิวเตอร์ มช.</li>
+                <li>นางสาวนนทรพร จันทร์มณีวงศ์ ภาควิชาวิทยาการคอมพิวเตอร์ มช.</li>
+            </ul>
+            <br />
+        <center>
+        <img height='80px' src="{{url_for('static',filename='logoCS.png') }}">
+        &nbsp;
+        &nbsp;
+        &nbsp;
+        &nbsp;
+        <img height='80px' src="{{url_for('static',filename='logoDS.jpeg') }}">
+        &nbsp;
+        &nbsp;
+        &nbsp;
+        &nbsp;
+        <img height='80px' src="{{url_for('static',filename='logoMaths.png') }}">
+        </center>
+        </div>
+    </div>
+</div>
+<footer>
+        Version 0.3 -- Enquiry: jakramate.b || thaned.r at cmu.ac.th <br />
+        &#169; 2021: Data Science Research Center @ the Department of Computer Science and the Department of Mathematics, Chiang Mai University. <br />
+</footer>
+
+</body>
+</html>

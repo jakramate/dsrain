@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>dsRain - Data Science @ Science-CMU Rainfall Forecasting</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}" />
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+    <!-- for datepicker -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+</head>
+
+<body>
+<!-- Tab links -->
+<header>
+<div class="tab">
+  <div class='logo'>dsRain</div>
+  <button class="tablinks" onclick="location.href='info'">Info</button>
+  <button class="tablinks" onclick="location.href='data'">Data</button>
+  <button class="active" onclick="location.href='/'">Forecast</button>
+</div>
+</header>
+
+<div class="container">
+    <div class='info'>
+	แผนภาพแสดงผลการคาดการณ์ปริมาณน้ำฝนของจังหวัดในประเทศไทย สำหรับวันที่ <b style="text-align:center;color:red">{{ date }}</b> จากค่าดัชนี BoB และ Sumatra ซึ่งคำนวณจากความสูงของคลื่นในบริเวณอ่าวเบงกอล และ บริเวณตะวันออกของเกาะสุมาตราตามลำดับ เลื่อนเมาส์บนแผนที่เพื่อดูตัวเลขการคาดการณ์ปริมาณน้ำฝนของแต่ละจังหวัด
+    </div>
+    <div class="chart" id="map"></div>
+    <div class='info'>
+        <form method="POST"> 
+           กราฟด้านล่างเปรียบเทียบค่าประมาณน้ำฝน 6 เดือนล่าสุด (สีฟ้า) เมื่อเทียบกับค่าปริมาณน้ำฝนจริง (สีเขียว) จากสถานีตรวจวัดของกรมอุตุนิยมวิทยาในจังหวัด {{ province }} ผู้ใช้สามารถดูข้อมูลของจังหวัดอื่นได้ {{ form.province() }}  <input type='submit' value='แสดงข้อมูล' />
+        </form>
+    </div>
+    <div class="chart" id="predictedRain"></div>
+    <div class="chart" id="actualRain"></div>
+    
+    <script>
+        var wmap1 = {{wmap | safe}};
+        Plotly.plot('map',wmap1,{});
+        var nationwide = {{plot1 | safe}};
+        Plotly.plot('actualRain', nationwide, {});
+        var province = {{plot2 | safe}};
+        Plotly.plot('predictedRain', province, {});
+    </script>
+</div> <!-- for container --> 
+            
+
+<footer>
+        Version 0.3 -- Enquiry: jakramate.b || thaned.r at cmu.ac.th <br />
+        &#169; 2021: Data Science Research Center @ the Department of Computer Science and the Department of Mathematics, Chiang Mai University. <br />
+</footer>
+
+</body>
+</html>

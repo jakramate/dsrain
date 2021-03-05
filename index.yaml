@@ -1,0 +1,11 @@
+indexes:
+
+- kind: stndate
+  properties:
+  - name: stn 
+  - name: date
+
+- kind: provdate
+  properties:
+  - name: province
+  - name: date
